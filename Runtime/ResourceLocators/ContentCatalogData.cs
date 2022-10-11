@@ -294,7 +294,7 @@ namespace UnityEngine.AddressableAssets.ResourceLocators
             }
             var extraData = Convert.FromBase64String(m_ExtraDataString);
 
-            var keyData = Convert.FromBase64String(m_KeyDataString);
+            var keyData = System.Text.Encoding.UTF8.GetBytes(m_KeyDataString); //Convert.FromBase64String(m_KeyDataString);
             var keyCount = BitConverter.ToInt32(keyData, 0);
             var keys = new object[keyCount];
             for (int i = 0; i < buckets.Length; i++)
@@ -573,7 +573,9 @@ namespace UnityEngine.AddressableAssets.ResourceLocators
                         bucketDataOffset = SerializationUtilities.WriteInt32ToByteArray(bucketData, entryToIndex[e], bucketDataOffset);
                 }
                 m_BucketDataString = Convert.ToBase64String(bucketData);
-                m_KeyDataString = Convert.ToBase64String(keyData.ToArray());
+                m_KeyDataString =
+                    System.Text.UTF8Encoding.UTF8
+                        .GetString(keyData.ToArray()); //Convert.ToBase64String(keyData.ToArray());
             }
         }
 
